@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ghanabuild.AI - Advanced House Cost Estimator</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.22.5/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/framer-motion@10.12.16/dist/framer-motion.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    function ValidationModal({ isOpen, onClose, message, details }) {
+      if (!isOpen) return null;
+      return (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={onClose}
+          role="dialog"
+          aria-modal="true"
+          tabIndex="-1"
+        >
+          <div
+            className="bg-white rounded-lg shadow-xl w-full max-w-md"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="bg-blue-600 text-white p-4 rounded-t-lg">
+              <h3 className="text-lg font-semibold">Validation Error</h3>
+            </div>
+            <div className="p-6">
+              <p className="text-gray-600">{message}</p>
+              {details && (
+                <ul className="list-disc pl-5 mt-2 text-gray-600">
+                  {details.map((detail, index) => (
+                    <li key={index}>{detail}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div className="p-4 bg-gray-50 rounded-b-lg flex justify-end">
+              <button
+                onClick={onClose}
+                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function ProjectForm({ onFormSubmit, isLoading }) {
+      const [formData, setFormData] = React.useState({
+        region: '',
+        projectType: 'residential',
+        totalFloorArea: '',
+        numberOfBathrooms: '',
+        numberOfFloors: '',
+        preferredFinishQuality: 'standard',
+        includeExternalWorks: false,
+      });
+      const [isModalOpen, setIsModalOpen] = React.useState(false);
+      const [modalMessage, setModalMessage] = React.useState('');
+      const [modalDetails, setModalDetails] = React.useState([]);
+
+      const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData({
+          ...formData,
+          [name]: type === 'checkbox' ? checked : value,
+        });
+      };
+
+      const validateForm = () => {
+        const errors = [];
+        if (!formData.region || !/^[a-zA-Z\s-]{2,}$/.test(formData.region)) {
+          errors.push('Region must be at least 2 characters long and contain only letters, spaces, or hyphens.');
+        }
+        const totalFloorArea = parseInt(formData.totalFloorArea, 10);
+        if (isNaN(totalFloorArea) || totalFloorArea < 500 || totalFloorArea > 10000 || totalFloorArea !== parseFloat(formData.totalFloorArea)) {
+          errors.push('Total Floor Area must be an integer between 500 and 10,000 sq ft.');
+        }
+        const numberOfBathrooms = parseInt(formData.numberOfBathrooms, 10);
+        if (isNaN(numberOfBathrooms) || numberOfBathrooms < 1 || numberOfBathrooms > 10 || numberOfBathrooms !== parseFloat(formData.numberOfBathrooms)) {
+          errors.push('Number of Bathrooms must be an integer between 1 and 10.');
+        }
+        const numberOfFloors = parseInt(formData.numberOfFloors, 10);
+        if (isNaN(numberOfFloors) || numberOfFloors < 1 || numberOfFloors > 5 || numberOfFloors !== parseFloat(formData.numberOfFloors)) {
+          errors.push('Number of Floors must be an integer between 1 and 5.');
+        }
+        return errors;
+      };
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        const errors = validateForm();
+        if (errors.length > 0) {
+          setModalMessage('Please correct the following errors:');
+          setModalDetails(errors);
+          setIsModalOpen(true);
+          return;
+        }
+        onFormSubmit(formData);
+      };
+
+      const closeModal = () => setIsModalOpen(false);
+
+      return (
+        <>
+          <section className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4">Enter Your Project Details</h2>
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="relative group">
+                <label htmlFor="region" className="block text-sm font-medium text-gray-700">Region</label>
+                <input
+                  id="region"
+                  name="region"
+                  type="text"
+                  value={formData.region}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  placeholder="e.g., Accra"
+                  aria-required="true"
+                />
+                <div className="absolute hidden group-hover:block bg-blue-600 text-white text-sm rounded py-2 px-3 -top-10 left-0 z-10">
+                  Enter a valid region (e.g., Accra, Kumasi-Tamale)
+                </div>
+              </div>
+              <div>
+                <label htmlFor="projectType" className="block text-sm font-medium text-gray-700">Project Type</label>
+                <select
+                  id="projectType"
+                  name="projectType"
+                  value={formData.projectType}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                >
+                  <option value="residential">Residential</option>
+                  <option value="commercial">Commercial</option>
+                </select>
+              </div>
+              <div className="relative group">
+                <label htmlFor="totalFloorArea" className="block text-sm font-medium text-gray-700">Total Floor Area (sq ft)</label>
+                <input
+                  id="totalFloorArea"
+                  name="totalFloorArea"
+                  type="number"
+                  min="500"
+                  max="10000"
+                  value={formData.totalFloorArea}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  placeholder="e.g., 2000"
+                  aria-required="true"
+                />
+                <div className="absolute hidden group-hover:block bg-blue-600 text-white text-sm rounded py-2 px-3 -top-10 left-0 z-10">
+                  Enter an integer between 500 and 10,000 sq ft
+                </div>
+              </div>
+              <div className="relative group">
+                <label htmlFor="numberOfBathrooms" className="block text-sm font-medium text-gray-700">Number of Bathrooms</label>
+                <input
+                  id="numberOfBathrooms"
+                  name="numberOfBathrooms"
+                  type="number"
+                  min="1"
+                  max="10"
+                  value={formData.numberOfBathrooms}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  placeholder="e.g., 2"
+                  aria-required="true"
+                />
+                <div className="absolute hidden group-hover:block bg-blue-600 text-white text-sm rounded py-2 px-3 -top-10 left-0 z-10">
+                  Enter an integer between 1 and 10
+                </div>
+              </div>
+              <div className="relative group">
+                <label htmlFor="numberOfFloors" className="block text-sm font-medium text-gray-700">Number of Floors</label>
+                <input
+                  id="numberOfFloors"
+                  name="numberOfFloors"
+                  type="number"
+                  min="1"
+                  max="5"
+                  value={formData.numberOfFloors}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                  placeholder="e.g., 1"
+                  aria-required="true"
+                />
+                <div className="absolute hidden group-hover:block bg-blue-600 text-white text-sm rounded py-2 px-3 -top-10 left-0 z-10">
+                  Enter an integer between 1 and 5
+                </div>
+              </div>
+              <div>
+                <label htmlFor="preferredFinishQuality" className="block text-sm font-medium text-gray-700">Preferred Finish Quality</label>
+                <select
+                  id="preferredFinishQuality"
+                  name="preferredFinishQuality"
+                  value={formData.preferredFinishQuality}
+                  onChange={handleChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                >
+                  <option value="standard">Standard</option>
+                  <option value="luxury">Luxury</option>
+                  <option value="eco-friendly">Eco-Friendly</option>
+                </select>
+              </div>
+              <div className="md:col-span-2 flex items-center">
+                <input
+                  id="includeExternalWorks"
+                  name="includeExternalWorks"
+                  type="checkbox"
+                  checked={formData.includeExternalWorks}
+                  onChange={handleChange}
+                  className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                />
+                <label htmlFor="includeExternalWorks" className="ml-2 text-sm font-medium text-gray-700">
+                  Include External Works (e.g., landscaping)
+                </label>
+              </div>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`mt-6 w-full p-2 rounded-md ${isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+              >
+                {isLoading ? 'Calculating...' : 'Calculate Cost Estimate'}
+              </button>
+            </form>
+          </section>
+          <ValidationModal isOpen={isModalOpen} onClose={closeModal} message={modalMessage} details={modalDetails} />
+        </>
+      );
+    }
+
+    function EstimateSummary({ estimateData, isLoading, error }) {
+      const [progress, setProgress] = React.useState(0);
+
+      React.useEffect(() => {
+        if (isLoading) {
+          const interval = setInterval(() => {
+            setProgress((prev) => (prev >= 100 ? 0 : prev + 10));
+          }, 200);
+          return () => clearInterval(interval);
+        }
+      }, [isLoading]);
+
+      if (isLoading) {
+        return (
+          <motion.section
+            className="max-w-4xl mx-auto mt-6 bg-white p-6 rounded-lg shadow-md"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <h2 className="text-xl font-semibold mb-4">Estimated Cost</h2>
+            <div className="space-y-2">
+              <p className="text-gray-
