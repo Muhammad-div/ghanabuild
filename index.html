@@ -1,8 +1,10 @@
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ghanabuild.AI: Advanced House Cost Estimator">
   <title>Ghanabuild.AI - Advanced House Cost Estimator</title>
   <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
@@ -126,7 +128,7 @@
                   placeholder="e.g., Accra"
                   aria-required="true"
                 />
-                <div className="absolute hidden group-hover:block bg-blue-600 text-white text-sm rounded py-2 px-3 -top-10 left-0 z-10">
+                <div className="absolute hidden group-hover:block group-focus:block bg-blue-600 text-white text-sm rounded py-2 px-3 -top-10 left-0 z-10">
                   Enter a valid region (e.g., Accra, Kumasi-Tamale)
                 </div>
               </div>
@@ -157,7 +159,7 @@
                   placeholder="e.g., 2000"
                   aria-required="true"
                 />
-                <div className="absolute hidden group-hover:block bg-blue-600 text-white text-sm rounded py-2 px-3 -top-10 left-0 z-10">
+                <div className="absolute hidden group-hover:block group-focus:block bg-blue-600 text-white text-sm rounded py-2 px-3 -top-10 left-0 z-10">
                   Enter an integer between 500 and 10,000 sq ft
                 </div>
               </div>
@@ -175,7 +177,7 @@
                   placeholder="e.g., 2"
                   aria-required="true"
                 />
-                <div className="absolute hidden group-hover:block bg-blue-600 text-white text-sm rounded py-2 px-3 -top-10 left-0 z-10">
+                <div className="absolute hidden group-hover:block group-focus:block bg-blue-600 text-white text-sm rounded py-2 px-3 -top-10 left-0 z-10">
                   Enter an integer between 1 and 10
                 </div>
               </div>
@@ -193,7 +195,7 @@
                   placeholder="e.g., 1"
                   aria-required="true"
                 />
-                <div className="absolute hidden group-hover:block bg-blue-600 text-white text-sm rounded py-2 px-3 -top-10 left-0 z-10">
+                <div className="absolute hidden group-hover:block group-focus:block bg-blue-600 text-white text-sm rounded py-2 px-3 -top-10 left-0 z-10">
                   Enter an integer between 1 and 5
                 </div>
               </div>
@@ -260,4 +262,187 @@
           >
             <h2 className="text-xl font-semibold mb-4">Estimated Cost</h2>
             <div className="space-y-2">
-              <p className="text-gray-
+              <p className="text-gray-600 text-center">Generating superhuman estimate... ({progress}%)</p>
+              <div className="w-full bg-gray-200 rounded-full h-2.5">
+                <motion.div
+                  className="bg-blue-600 h-2.5 rounded-full"
+                  initial={{ width: '0%' }}
+                  animate={{ width: `${progress}%` }}
+                  transition={{ duration: 0.2 }}
+                />
+              </div>
+            </div>
+          </motion.section>
+        );
+      }
+
+      if (error) {
+        return (
+          <motion.section
+            className="max-w-4xl mx-auto mt-6 bg-white p-6 rounded-lg shadow-md"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <h2 className="text-xl font-semibold mb-4">Estimated Cost</h2>
+            <p className="text-red-600">{error}</p>
+            {error === 'Validation failed' && estimateData?.details && (
+              <ul className="list-disc pl-5 mt-2 text-red-600">
+                {estimateData.details.map((detail, index) => (
+                  <li key={index}>{detail}</li>
+                ))}
+              </ul>
+            )}
+          </motion.section>
+        );
+      }
+
+      if (!estimateData) {
+        return (
+          <motion.section
+            className="max-w-4xl mx-auto mt-6 bg-white p-6 rounded-lg shadow-md"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <h2 className="text-xl font-semibold mb-4">Estimated Cost</h2>
+            <p className="text-gray-600">Please fill out the form to generate an estimate.</p>
+          </motion.section>
+        );
+      }
+
+      return (
+        <>
+          <motion.section
+            className="max-w-4xl mx-auto mt-6 bg-white p-6 rounded-lg shadow-md"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <h2 className="text-xl font-semibold mb-4">Estimated Cost</h2>
+            <div className="space-y-4">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+              >
+                <h3 className="text-lg font-medium">Project Details</h3>
+                <ul className="list-disc pl-5 text-gray-600">
+                  <li>Region: {estimateData.user_inputs.region}</li>
+                  <li>Project Type: {estimateData.user_inputs.projectType}</li>
+                  <li>Total Floor Area: {estimateData.user_inputs.totalFloorArea} sq ft</li>
+                  <li>Bathrooms: {estimateData.user_inputs.numberOfBathrooms}</li>
+                  <li>Floors: {estimateData.user_inputs.numberOfFloors}</li>
+                  <li>Finish Quality: {estimateData.user_inputs.preferredFinishQuality}</li>
+                  <li>External Works: {estimateData.user_inputs.includeExternalWorks ? 'Yes' : 'No'}</li>
+                </ul>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+              >
+                <h3 className="text-lg font-medium">Cost Estimate</h3>
+                <p className="text-gray-600">Total Cost: ${estimateData.estimate.total_cost.toLocaleString()}</p>
+                <ul className="list-disc pl-5 text-gray-600">
+                  <li>Materials: ${estimateData.estimate.breakdown.materials.toLocaleString()}</li>
+                  <li>Labor: ${estimateData.estimate.breakdown.labor.toLocaleString()}</li>
+                  <li>External Works: ${estimateData.estimate.breakdown.external_works.toLocaleString()}</li>
+                </ul>
+                <p className="text-gray-600">Confidence Interval: ${estimateData.estimate.confidence_interval[0].toLocaleString()} - ${estimateData.estimate.confidence_interval[1].toLocaleString()}</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.3 }}
+              >
+                <h3 className="text-lg font-medium">Optimizations</h3>
+                <ul className="list-disc pl-5 text-gray-600">
+                  {estimateData.optimizations.recommendations.map((rec, index) => (
+                    <li key={index}>{rec.material}: Saves ${rec.savings} ({rec.impact})</li>
+                  ))}
+                </ul>
+                <p className="text-gray-600">Total Savings: ${estimateData.optimizations.total_savings.toLocaleString()}</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.4 }}
+              >
+                <h3 className="text-lg font-medium">Ethical Review</h3>
+                <ul className="list-disc pl-5 text-gray-600">
+                  {estimateData.ethical_review.flags.map((flag, index) => (
+                    <li key={index}>{flag.issue}: {flag.mitigation}</li>
+                  ))}
+                </ul>
+                <p className="text-gray-600">Status: {estimateData.ethical_review.status}</p>
+              </motion.div>
+            </div>
+          </motion.section>
+          {estimateData && (
+            <motion.button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="fixed bottom-4 right-4 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              aria-label="Back to top"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+            </motion.button>
+          )}
+        </>
+      );
+    }
+
+    function App() {
+      const [estimateData, setEstimateData] = React.useState(null);
+      const [isLoading, setIsLoading] = React.useState(false);
+      const [error, setError] = React.useState(null);
+
+      const handleFormSubmit = async (formData) => {
+        setIsLoading(true);
+        setError(null);
+        try {
+          const response = await fetch('BACKEND_URL/estimate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData),
+          });
+          const data = await response.json();
+          if (!response.ok) {
+            throw Object.assign(new Error(data.error || 'Failed to fetch estimate'), { details: data.details });
+          }
+          setEstimateData(data);
+        } catch (err) {
+          setError(err.message);
+          setEstimateData(err.message === 'Validation failed' ? { details: err.details } : null);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      return (
+        <div className="min-h-screen bg-gray-100 flex flex-col">
+          <header className="bg-blue-600 text-white p-4">
+            <h1 className="text-2xl font-bold">Ghanabuild.AI</h1>
+            <p className="text-sm">Advanced House Cost Estimator</p>
+          </header>
+          <main className="flex-grow p-4">
+            <ProjectForm onFormSubmit={handleFormSubmit} isLoading={isLoading} />
+            <EstimateSummary estimateData={estimateData} isLoading={isLoading} error={error} />
+          </main>
+          <footer className="bg-gray-800 text-white p-4 text-center">
+            <p>&copy; 2025 Ghanabuild.AI. All rights reserved.</p>
+          </footer>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
