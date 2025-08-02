@@ -1,1 +1,21 @@
-{"name":"ghanabuild-ui-v1","version":"1.0.0","private":true,"scripts":{"dev":"vite","build":"vite build","preview":"vite preview","test":"echo \"Add tests via @testing-library/react!\" && exit 0"},"dependencies":{"react":"^18.2.0","react-dom":"^18.2.0","axios":"^1.6.0","framer-motion":"^10.16.3"},"devDependencies":{"vite":"^4.0.0","@testing-library/react":"^14.0.0"}}
+{
+  "name": "ghanabuild-ui-v1",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.8"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}
