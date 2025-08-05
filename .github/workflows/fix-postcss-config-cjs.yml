@@ -1,0 +1,51 @@
+name: Auto Fix PostCSS Config to CJS and Merge
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'postcss.config.js'
+
+jobs:
+  fix-postcss-config-cjs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rename and replace PostCSS config to CJS syntax
+        run: |
+          if [ -f postcss.config.js ]; then
+            mv postcss.config.js postcss.config.cjs
+          fi
+          echo "module.exports = {" > postcss.config.cjs
+          echo "  plugins: {" >> postcss.config.cjs
+          echo "    tailwindcss: {}," >> postcss.config.cjs
+          echo "    autoprefixer: {}," >> postcss.config.cjs
+          echo "  }," >> postcss.config.cjs
+          echo "};" >> postcss.config.cjs
+          rm -f postcss.config.js || true
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add postcss.config.cjs
+          git rm -f postcss.config.js || true
+          git commit -m "ci: fix PostCSS config to CommonJS (.cjs) for Vercel build" || echo "No changes to commit"
+
+      - name: Create Pull Request
+        id: pr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: fix-postcss-config-cjs
+          title: "ci: fix PostCSS config to CommonJS (.cjs)"
+          body: "This PR renames `postcss.config.js` to `.cjs` and switches to CommonJS export to fix Vercel build errors."
+          labels: automated, ci
+          commit-message: "ci: fix PostCSS config to CommonJS (.cjs)"
+
+      - name: Auto Merge PR
+        if: steps.pr.outputs.pull-request-number != ''
+        uses: pascalgn/automerge-action@v0.15.4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          merge_method: squash
