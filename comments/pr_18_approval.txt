@@ -1,0 +1,2 @@
+✅ Automated review: The PostCSS config fix is correct and ready to merge.
+This resolves the ES module compatibility issue for Vercel builds.
