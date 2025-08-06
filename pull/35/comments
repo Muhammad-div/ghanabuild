@@ -1,0 +1,20 @@
+@copilot Please ensure the following steps are fully implemented in this PR:
+
+1. Install and save `framer-motion` dependency:
+   → `npm install framer-motion`
+
+2. Add missing devDependencies for Tailwind and PostCSS to fix build errors:
+   → `npm install -D tailwindcss postcss autoprefixer`
+
+3. Ensure `tailwind.config.js` and `postcss.config.js` are properly configured.
+
+4. Replace Tailwind CDN with proper import in main CSS (e.g., `index.css`):
+   ```css
+   @tailwind base;
+   @tailwind components;
+   @tailwind utilities;
+   ```
+
+5. Verify that Vercel build and deployment now pass without error and the site is fully functional.
+
+Once completed, please mark this PR as **Ready for Review** and I’ll proceed to merge.
