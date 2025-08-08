@@ -55,10 +55,18 @@ function ProjectForm({ onFormSubmit, isLoading }) {
     region: "",
     projectType: "residential",
     totalFloorArea: "",
+    areaUnit: "sqm", // Default to square meters for Ghana
     numberOfBathrooms: "",
     numberOfFloors: "",
     preferredFinishQuality: "standard",
     includeExternalWorks: false,
+    // Custom cost inputs
+    customLandCost: "",
+    useCustomLandCost: false,
+    customMaterialCost: "",
+    useCustomMaterialCost: false,
+    customLaborCost: "",
+    useCustomLaborCost: false,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -79,17 +87,23 @@ function ProjectForm({ onFormSubmit, isLoading }) {
         "Region must be at least 2 characters long and contain only letters, spaces, or hyphens."
       );
     }
+    
     const totalFloorArea = parseInt(formData.totalFloorArea, 10);
+    const minArea = formData.areaUnit === 'sqm' ? 50 : 500; // 50 sqm minimum, 500 sqft minimum
+    const maxArea = formData.areaUnit === 'sqm' ? 1000 : 10000; // 1000 sqm max, 10000 sqft max
+    const areaLabel = formData.areaUnit === 'sqm' ? 'sq m' : 'sq ft';
+    
     if (
       isNaN(totalFloorArea) ||
-      totalFloorArea < 500 ||
-      totalFloorArea > 10000 ||
+      totalFloorArea < minArea ||
+      totalFloorArea > maxArea ||
       totalFloorArea !== parseFloat(formData.totalFloorArea)
     ) {
       errors.push(
-        "Total Floor Area must be an integer between 500 and 10,000 sq ft."
+        `Total Floor Area must be an integer between ${minArea} and ${maxArea} ${areaLabel}.`
       );
     }
+    
     const numberOfBathrooms = parseInt(formData.numberOfBathrooms, 10);
     if (
       isNaN(numberOfBathrooms) ||
@@ -101,6 +115,7 @@ function ProjectForm({ onFormSubmit, isLoading }) {
         "Number of Bathrooms must be an integer between 1 and 10."
       );
     }
+    
     const numberOfFloors = parseInt(formData.numberOfFloors, 10);
     if (
       isNaN(numberOfFloors) ||
@@ -112,6 +127,29 @@ function ProjectForm({ onFormSubmit, isLoading }) {
         "Number of Floors must be an integer between 1 and 5."
       );
     }
+
+    // Validate custom costs if enabled
+    if (formData.useCustomLandCost) {
+      const customLandCost = parseFloat(formData.customLandCost);
+      if (isNaN(customLandCost) || customLandCost < 0 || customLandCost > 1000000) {
+        errors.push("Custom land cost must be a valid number between 0 and 1,000,000 GHS.");
+      }
+    }
+
+    if (formData.useCustomMaterialCost) {
+      const customMaterialCost = parseFloat(formData.customMaterialCost);
+      if (isNaN(customMaterialCost) || customMaterialCost < 0 || customMaterialCost > 10000) {
+        errors.push("Custom material cost must be a valid number between 0 and 10,000 GHS per sqm.");
+      }
+    }
+
+    if (formData.useCustomLaborCost) {
+      const customLaborCost = parseFloat(formData.customLaborCost);
+      if (isNaN(customLaborCost) || customLaborCost < 0 || customLaborCost > 1000) {
+        errors.push("Custom labor cost must be a valid number between 0 and 1,000 GHS per day.");
+      }
+    }
+    
     return errors;
   };
 
@@ -178,21 +216,39 @@ function ProjectForm({ onFormSubmit, isLoading }) {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="totalFloorArea" className="text-sm font-medium text-gray-700">Total Floor Area (sq ft)</label>
-            <input
-              id="totalFloorArea"
-              name="totalFloorArea"
-              type="number"
-              min={500}
-              max={10000}
-              step={1}
-              placeholder="e.g., 2000"
-              value={formData.totalFloorArea || ""}
-              onChange={handleChange}
-              className="mt-2 input-field rounded-lg p-3 focus:outline-none focus-ring"
-              required
-              inputMode="numeric"
-            />
+            <label htmlFor="totalFloorArea" className="text-sm font-medium text-gray-700">
+              Total Floor Area ({formData.areaUnit === 'sqm' ? 'sq m' : 'sq ft'})
+            </label>
+            <div className="flex gap-2 mt-2">
+              <input
+                id="totalFloorArea"
+                name="totalFloorArea"
+                type="number"
+                min={formData.areaUnit === 'sqm' ? 50 : 500}
+                max={formData.areaUnit === 'sqm' ? 1000 : 10000}
+                step={1}
+                placeholder={formData.areaUnit === 'sqm' ? 'e.g., 200' : 'e.g., 2000'}
+                value={formData.totalFloorArea || ""}
+                onChange={handleChange}
+                className="flex-1 input-field rounded-lg p-3 focus:outline-none focus-ring"
+                required
+                inputMode="numeric"
+              />
+              <select
+                name="areaUnit"
+                value={formData.areaUnit}
+                onChange={handleChange}
+                className="input-field rounded-lg p-3 focus:outline-none focus-ring w-24"
+              >
+                <option value="sqm">sq m</option>
+                <option value="sqft">sq ft</option>
+              </select>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              {formData.areaUnit === 'sqm' 
+                ? 'Square meters (preferred in Ghana)' 
+                : 'Square feet (1 sq ft = 0.093 sq m)'}
+            </p>
           </div>
 
           <div className="flex flex-col">
@@ -258,6 +314,119 @@ function ProjectForm({ onFormSubmit, isLoading }) {
             <label htmlFor="includeExternalWorks" className="text-sm font-medium text-gray-700">
               Include External Works (landscaping, driveways, etc.)
             </label>
+          </div>
+
+          {/* Custom Costs Section */}
+          <div className="md:col-span-2 mt-6">
+            <div className="bg-gradient-to-r from-blue-50 to-green-50 p-4 rounded-lg border border-blue-200">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+                </svg>
+                Custom Cost Overrides (Optional)
+              </h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Override default regional costs with your own specific rates. Leave unchecked to use regional averages.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Custom Land Cost */}
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2 mb-2">
+                    <input
+                      id="useCustomLandCost"
+                      name="useCustomLandCost"
+                      type="checkbox"
+                      checked={Boolean(formData.useCustomLandCost)}
+                      onChange={handleChange}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor="useCustomLandCost" className="text-sm font-medium text-gray-700">
+                      Custom Land Cost (GHS per plot)
+                    </label>
+                  </div>
+                  {formData.useCustomLandCost && (
+                    <input
+                      id="customLandCost"
+                      name="customLandCost"
+                      type="number"
+                      min={0}
+                      max={1000000}
+                      step={1000}
+                      placeholder="e.g., 120000"
+                      value={formData.customLandCost || ""}
+                      onChange={handleChange}
+                      className="input-field rounded-lg p-3 focus:outline-none focus-ring"
+                      inputMode="numeric"
+                    />
+                  )}
+                </div>
+
+                {/* Custom Material Cost */}
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2 mb-2">
+                    <input
+                      id="useCustomMaterialCost"
+                      name="useCustomMaterialCost"
+                      type="checkbox"
+                      checked={Boolean(formData.useCustomMaterialCost)}
+                      onChange={handleChange}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor="useCustomMaterialCost" className="text-sm font-medium text-gray-700">
+                      Custom Material Cost (GHS per sqm)
+                    </label>
+                  </div>
+                  {formData.useCustomMaterialCost && (
+                    <input
+                      id="customMaterialCost"
+                      name="customMaterialCost"
+                      type="number"
+                      min={0}
+                      max={10000}
+                      step={50}
+                      placeholder="e.g., 2500"
+                      value={formData.customMaterialCost || ""}
+                      onChange={handleChange}
+                      className="input-field rounded-lg p-3 focus:outline-none focus-ring"
+                      inputMode="numeric"
+                    />
+                  )}
+                </div>
+
+                {/* Custom Labor Cost */}
+                <div className="flex flex-col md:col-span-2">
+                  <div className="flex items-center gap-2 mb-2">
+                    <input
+                      id="useCustomLaborCost"
+                      name="useCustomLaborCost"
+                      type="checkbox"
+                      checked={Boolean(formData.useCustomLaborCost)}
+                      onChange={handleChange}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor="useCustomLaborCost" className="text-sm font-medium text-gray-700">
+                      Custom Labor Cost (GHS per day)
+                    </label>
+                  </div>
+                  {formData.useCustomLaborCost && (
+                    <input
+                      id="customLaborCost"
+                      name="customLaborCost"
+                      type="number"
+                      min={0}
+                      max={1000}
+                      step={10}
+                      placeholder="e.g., 180"
+                      value={formData.customLaborCost || ""}
+                      onChange={handleChange}
+                      className="input-field rounded-lg p-3 focus:outline-none focus-ring max-w-xs"
+                      inputMode="numeric"
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="md:col-span-2 flex justify-end mt-2">
@@ -353,11 +522,12 @@ function EstimateSummary({ estimateData, isLoading, error, onRetry }) {
   if (!estimateData) return null;
 
   const rows = [
+    { label: 'Land Cost', value: estimateData?.landCost, highlight: true },
     { label: 'Base Construction Cost', value: estimateData?.baseCost },
     { label: 'Bathroom Costs', value: estimateData?.bathroomCost },
     estimateData?.externalWorks > 0 ? { label: 'External Works', value: estimateData?.externalWorks } : null,
     { label: 'Additional Fees', value: estimateData?.additionalFees },
-    { label: 'Subtotal', value: (estimateData?.baseCost || 0) + (estimateData?.bathroomCost || 0) + (estimateData?.externalWorks || 0) + (estimateData?.additionalFees || 0) },
+    { label: 'Construction Subtotal', value: (estimateData?.baseCost || 0) + (estimateData?.bathroomCost || 0) + (estimateData?.externalWorks || 0) + (estimateData?.additionalFees || 0) },
     { label: `Markup (${Math.round((estimateData?.markupRate || 0) * 100)}%)`, value: estimateData?.markup },
     { label: `Contingency (${Math.round((estimateData?.contingencyRate || 0) * 100)}%)`, value: estimateData?.contingency },
     { label: `Location Adjustment (${((estimateData?.locationFactor || 1) - 1) * 100}%)`, value: estimateData?.locationAdjustment },
@@ -385,6 +555,45 @@ function EstimateSummary({ estimateData, isLoading, error, onRetry }) {
           </div>
         </div>
         
+        {/* Project Details */}
+        {estimateData?.projectDetails && (
+          <div className="mb-6 bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-lg border border-gray-200">
+            <div className="flex items-center gap-2 mb-3">
+              <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+              <h4 className="font-semibold text-gray-800">Project Summary</h4>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+              <div className="bg-white bg-opacity-70 p-3 rounded-lg">
+                <span className="font-medium text-gray-700">Floor Area</span>
+                <p className="text-gray-600">
+                  {estimateData.projectDetails.totalFloorArea} {estimateData.projectDetails.areaUnit}
+                  {estimateData.projectDetails.areaUnit === 'sqft' && (
+                    <span className="block text-xs text-gray-500">
+                      (~{Math.round(estimateData.projectDetails.totalFloorAreaSqm)} sqm)
+                    </span>
+                  )}
+                </p>
+              </div>
+              <div className="bg-white bg-opacity-70 p-3 rounded-lg">
+                <span className="font-medium text-gray-700">Bathrooms</span>
+                <p className="text-gray-600">{estimateData.projectDetails.numberOfBathrooms}</p>
+              </div>
+              <div className="bg-white bg-opacity-70 p-3 rounded-lg">
+                <span className="font-medium text-gray-700">Floors</span>
+                <p className="text-gray-600">{estimateData.projectDetails.numberOfFloors}</p>
+              </div>
+              <div className="bg-white bg-opacity-70 p-3 rounded-lg">
+                <span className="font-medium text-gray-700">Type & Quality</span>
+                <p className="text-gray-600 capitalize">
+                  {estimateData.projectDetails.projectType} - {estimateData.projectDetails.finishQuality}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Region Information */}
         {estimateData?.regionData && (
           <div className="mb-6 region-info-card p-4">
@@ -393,19 +602,45 @@ function EstimateSummary({ estimateData, isLoading, error, onRetry }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <h4 className="font-semibold text-gray-800">Regional Data: {estimateData.regionData.name}</h4>
+              <h4 className="font-semibold text-gray-800">
+                Regional Data: {estimateData.regionData.name}
+                {(estimateData.regionData.isCustomLandCost || estimateData.regionData.isCustomMaterialCost || estimateData.regionData.isCustomLaborCost) && (
+                  <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Custom Rates Applied</span>
+                )}
+              </h4>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-              <div className="bg-white bg-opacity-60 p-3 rounded-lg">
-                <span className="font-medium text-gray-700">Land Cost</span>
+              <div className={`bg-white bg-opacity-60 p-3 rounded-lg ${estimateData.regionData.isCustomLandCost ? 'ring-2 ring-blue-300' : ''}`}>
+                <span className="font-medium text-gray-700 flex items-center gap-1">
+                  Land Cost
+                  {estimateData.regionData.isCustomLandCost && (
+                    <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  )}
+                </span>
                 <p className="text-gray-600">{formatMoney(estimateData.regionData.landCost)} per plot</p>
               </div>
-              <div className="bg-white bg-opacity-60 p-3 rounded-lg">
-                <span className="font-medium text-gray-700">Construction Rate</span>
+              <div className={`bg-white bg-opacity-60 p-3 rounded-lg ${estimateData.regionData.isCustomMaterialCost ? 'ring-2 ring-blue-300' : ''}`}>
+                <span className="font-medium text-gray-700 flex items-center gap-1">
+                  Material Rate
+                  {estimateData.regionData.isCustomMaterialCost && (
+                    <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  )}
+                </span>
                 <p className="text-gray-600">{formatMoney(estimateData.regionData.constructionCostPerSqm)}/sqm</p>
               </div>
-              <div className="bg-white bg-opacity-60 p-3 rounded-lg">
-                <span className="font-medium text-gray-700">Labor Rate</span>
+              <div className={`bg-white bg-opacity-60 p-3 rounded-lg ${estimateData.regionData.isCustomLaborCost ? 'ring-2 ring-blue-300' : ''}`}>
+                <span className="font-medium text-gray-700 flex items-center gap-1">
+                  Labor Rate
+                  {estimateData.regionData.isCustomLaborCost && (
+                    <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  )}
+                </span>
                 <p className="text-gray-600">{formatMoney(estimateData.regionData.laborCostPerDay)}/day</p>
               </div>
             </div>
@@ -414,8 +649,17 @@ function EstimateSummary({ estimateData, isLoading, error, onRetry }) {
         
         <div className="space-y-1 mb-6">
           {rows.map((row, idx) => (
-            <div key={row.label} className="py-3 px-4 bg-white bg-opacity-50 rounded-lg flex items-center justify-between hover:bg-opacity-70 transition-colors">
-              <span className="text-gray-700 font-medium">{row.label}</span>
+            <div key={row.label} className={`py-3 px-4 rounded-lg flex items-center justify-between hover:bg-opacity-70 transition-colors ${
+              row.highlight ? 'bg-blue-50 border border-blue-200' : 'bg-white bg-opacity-50'
+            }`}>
+              <span className="text-gray-700 font-medium flex items-center gap-2">
+                {row.highlight && (
+                  <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                  </svg>
+                )}
+                {row.label}
+              </span>
               <span className="font-semibold text-gray-800">{formatMoney(row.value)}</span>
             </div>
           ))}
@@ -491,11 +735,29 @@ function App() {
       formData?.preferredFinishQuality
     );
 
-    // Convert sq ft to sq meters for accurate calculations
-    const totalFloorAreaSqm = totalFloorArea * 0.092903; // 1 sq ft = 0.092903 sq m
+    // Handle area unit conversion
+    let totalFloorAreaSqm;
+    if (formData?.areaUnit === 'sqm') {
+      totalFloorAreaSqm = totalFloorArea; // Already in square meters
+    } else {
+      totalFloorAreaSqm = totalFloorArea * 0.092903; // Convert sq ft to sq m
+    }
 
-    // Base construction costs using regional data
-    const baseConstructionCost = totalFloorAreaSqm * regionData.construction_cost_per_sqm;
+    // Determine costs - use custom if provided, otherwise use regional data
+    const landCostPerPlot = formData?.useCustomLandCost && formData?.customLandCost 
+      ? parseFloat(formData.customLandCost) 
+      : regionData.land_cost_per_plot;
+
+    const constructionCostPerSqm = formData?.useCustomMaterialCost && formData?.customMaterialCost 
+      ? parseFloat(formData.customMaterialCost) 
+      : regionData.construction_cost_per_sqm;
+
+    const laborCostPerDay = formData?.useCustomLaborCost && formData?.customLaborCost 
+      ? parseFloat(formData.customLaborCost) 
+      : regionData.labor_cost_per_day;
+
+    // Base construction costs using determined rates
+    const baseConstructionCost = totalFloorAreaSqm * constructionCostPerSqm;
     
     // Apply quality multiplier
     const qualityMultiplier = regionData.quality_multipliers[formData?.preferredFinishQuality] || 1.0;
@@ -536,6 +798,7 @@ function App() {
       laborCost: adjustedConstructionCost * 0.3, // Estimate 30% labor
       equipmentCost: adjustedConstructionCost * 0.1, // Estimate 10% equipment
       baseCost: adjustedConstructionCost,
+      landCost: landCostPerPlot, // Include land cost in breakdown
       bathroomCost,
       externalWorks,
       additionalFees,
@@ -547,12 +810,26 @@ function App() {
       locationAdjustment,
       inflationAdjustment,
       riskPremium,
-      totalCost,
+      totalCost: totalCost + landCostPerPlot, // Include land cost in total
+      totalCostWithoutLand: totalCost, // Keep construction-only cost
       regionData: {
         name: regionData.displayName,
-        landCost: regionData.land_cost_per_plot,
-        constructionCostPerSqm: regionData.construction_cost_per_sqm,
-        laborCostPerDay: regionData.labor_cost_per_day
+        landCost: landCostPerPlot,
+        constructionCostPerSqm: constructionCostPerSqm,
+        laborCostPerDay: laborCostPerDay,
+        isCustomLandCost: formData?.useCustomLandCost || false,
+        isCustomMaterialCost: formData?.useCustomMaterialCost || false,
+        isCustomLaborCost: formData?.useCustomLaborCost || false
+      },
+      projectDetails: {
+        totalFloorArea,
+        areaUnit: formData?.areaUnit || 'sqm',
+        totalFloorAreaSqm,
+        numberOfBathrooms,
+        numberOfFloors,
+        projectType: formData?.projectType,
+        finishQuality: formData?.preferredFinishQuality,
+        includeExternalWorks: formData?.includeExternalWorks
       },
       inputs: { ...formData },
     };
