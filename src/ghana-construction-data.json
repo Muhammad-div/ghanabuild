@@ -1,0 +1,326 @@
+{
+  "regions": [
+    {
+      "name": "Accra",
+      "displayName": "Greater Accra",
+      "land_cost_per_plot": 150000,
+      "construction_cost_per_sqm": 3500,
+      "labor_cost_per_day": 150,
+      "material_cost_index": 1.0,
+      "location_factor": 1.05,
+      "additional_fees": {
+        "permits": 5000,
+        "utilities_connection": 10000,
+        "architectural_design": 8000,
+        "structural_engineering": 6000,
+        "site_survey": 3000
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.25,
+        "luxury": 1.5
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.15
+      },
+      "bathroom_cost": 3000,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "Kumasi",
+      "displayName": "Ashanti Region",
+      "land_cost_per_plot": 80000,
+      "construction_cost_per_sqm": 3200,
+      "labor_cost_per_day": 120,
+      "material_cost_index": 0.9,
+      "location_factor": 1.03,
+      "additional_fees": {
+        "permits": 4000,
+        "utilities_connection": 8000,
+        "architectural_design": 7000,
+        "structural_engineering": 5000,
+        "site_survey": 2500
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.2,
+        "luxury": 1.45
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.12
+      },
+      "bathroom_cost": 2800,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "Tamale",
+      "displayName": "Northern Region",
+      "land_cost_per_plot": 50000,
+      "construction_cost_per_sqm": 3000,
+      "labor_cost_per_day": 100,
+      "material_cost_index": 0.85,
+      "location_factor": 0.98,
+      "additional_fees": {
+        "permits": 3000,
+        "utilities_connection": 7000,
+        "architectural_design": 6000,
+        "structural_engineering": 4500,
+        "site_survey": 2000
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.18,
+        "luxury": 1.4
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.1
+      },
+      "bathroom_cost": 2500,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "Sekondi-Takoradi",
+      "displayName": "Western Region",
+      "land_cost_per_plot": 70000,
+      "construction_cost_per_sqm": 3300,
+      "labor_cost_per_day": 130,
+      "material_cost_index": 0.92,
+      "location_factor": 1.02,
+      "additional_fees": {
+        "permits": 3500,
+        "utilities_connection": 7500,
+        "architectural_design": 6500,
+        "structural_engineering": 4800,
+        "site_survey": 2200
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.22,
+        "luxury": 1.48
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.13
+      },
+      "bathroom_cost": 2700,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "Cape Coast",
+      "displayName": "Central Region",
+      "land_cost_per_plot": 60000,
+      "construction_cost_per_sqm": 3100,
+      "labor_cost_per_day": 110,
+      "material_cost_index": 0.88,
+      "location_factor": 1.0,
+      "additional_fees": {
+        "permits": 3200,
+        "utilities_connection": 7200,
+        "architectural_design": 6200,
+        "structural_engineering": 4600,
+        "site_survey": 2100
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.21,
+        "luxury": 1.42
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.11
+      },
+      "bathroom_cost": 2600,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "Ho",
+      "displayName": "Volta Region",
+      "land_cost_per_plot": 55000,
+      "construction_cost_per_sqm": 3050,
+      "labor_cost_per_day": 105,
+      "material_cost_index": 0.87,
+      "location_factor": 1.0,
+      "additional_fees": {
+        "permits": 3100,
+        "utilities_connection": 7100,
+        "architectural_design": 6100,
+        "structural_engineering": 4500,
+        "site_survey": 2050
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.19,
+        "luxury": 1.41
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.1
+      },
+      "bathroom_cost": 2550,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "Koforidua",
+      "displayName": "Eastern Region",
+      "land_cost_per_plot": 65000,
+      "construction_cost_per_sqm": 3150,
+      "labor_cost_per_day": 115,
+      "material_cost_index": 0.89,
+      "location_factor": 1.01,
+      "additional_fees": {
+        "permits": 3300,
+        "utilities_connection": 7300,
+        "architectural_design": 6300,
+        "structural_engineering": 4700,
+        "site_survey": 2150
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.2,
+        "luxury": 1.43
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.11
+      },
+      "bathroom_cost": 2650,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "Sunyani",
+      "displayName": "Bono Region",
+      "land_cost_per_plot": 45000,
+      "construction_cost_per_sqm": 2950,
+      "labor_cost_per_day": 95,
+      "material_cost_index": 0.83,
+      "location_factor": 0.97,
+      "additional_fees": {
+        "permits": 2800,
+        "utilities_connection": 6800,
+        "architectural_design": 5800,
+        "structural_engineering": 4200,
+        "site_survey": 1900
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.17,
+        "luxury": 1.38
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.09
+      },
+      "bathroom_cost": 2400,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "Damongo",
+      "displayName": "Savannah Region",
+      "land_cost_per_plot": 40000,
+      "construction_cost_per_sqm": 2850,
+      "labor_cost_per_day": 90,
+      "material_cost_index": 0.8,
+      "location_factor": 0.97,
+      "additional_fees": {
+        "permits": 2500,
+        "utilities_connection": 6500,
+        "architectural_design": 5500,
+        "structural_engineering": 4000,
+        "site_survey": 1800
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.15,
+        "luxury": 1.35
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.08
+      },
+      "bathroom_cost": 2300,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "Bolgatanga",
+      "displayName": "Upper East Region",
+      "land_cost_per_plot": 35000,
+      "construction_cost_per_sqm": 2800,
+      "labor_cost_per_day": 85,
+      "material_cost_index": 0.78,
+      "location_factor": 0.95,
+      "additional_fees": {
+        "permits": 2200,
+        "utilities_connection": 6200,
+        "architectural_design": 5200,
+        "structural_engineering": 3800,
+        "site_survey": 1700
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.13,
+        "luxury": 1.32
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.07
+      },
+      "bathroom_cost": 2200,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "Wa",
+      "displayName": "Upper West Region",
+      "land_cost_per_plot": 30000,
+      "construction_cost_per_sqm": 2750,
+      "labor_cost_per_day": 80,
+      "material_cost_index": 0.75,
+      "location_factor": 0.95,
+      "additional_fees": {
+        "permits": 2000,
+        "utilities_connection": 6000,
+        "architectural_design": 5000,
+        "structural_engineering": 3600,
+        "site_survey": 1600
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.12,
+        "luxury": 1.3
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.06
+      },
+      "bathroom_cost": 2100,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    }
+  ],
+  "default_rates": {
+    "markup_rate": 0.15,
+    "contingency_rate": 0.1,
+    "inflation_rate": 0.03,
+    "risk_premium_rate": 0.05
+  },
+  "currency": "GHS",
+  "last_updated": "2025-01-27",
+  "data_sources": [
+    "quaorealty.com",
+    "dlgroupgh.com", 
+    "nwngh.com",
+    "housingafrique.com"
+  ]
+}
