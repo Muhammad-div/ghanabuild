@@ -307,6 +307,146 @@
       "bathroom_cost": 2100,
       "floor_multiplier": 0.05,
       "external_works_rate": 0.05
+    },
+    {
+      "name": "Ahafo",
+      "displayName": "Ahafo Region",
+      "land_cost_per_plot": 48000,
+      "construction_cost_per_sqm": 2980,
+      "labor_cost_per_day": 100,
+      "material_cost_index": 0.84,
+      "location_factor": 0.98,
+      "additional_fees": {
+        "permits": 2900,
+        "utilities_connection": 6900,
+        "architectural_design": 5900,
+        "structural_engineering": 4300,
+        "site_survey": 1950
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.18,
+        "luxury": 1.39
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.09
+      },
+      "bathroom_cost": 2450,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "Bono East",
+      "displayName": "Bono East Region",
+      "land_cost_per_plot": 42000,
+      "construction_cost_per_sqm": 2900,
+      "labor_cost_per_day": 92,
+      "material_cost_index": 0.82,
+      "location_factor": 0.97,
+      "additional_fees": {
+        "permits": 2700,
+        "utilities_connection": 6700,
+        "architectural_design": 5700,
+        "structural_engineering": 4100,
+        "site_survey": 1850
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.16,
+        "luxury": 1.37
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.08
+      },
+      "bathroom_cost": 2350,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "North East",
+      "displayName": "North East Region",
+      "land_cost_per_plot": 32000,
+      "construction_cost_per_sqm": 2780,
+      "labor_cost_per_day": 82,
+      "material_cost_index": 0.76,
+      "location_factor": 0.94,
+      "additional_fees": {
+        "permits": 2100,
+        "utilities_connection": 6100,
+        "architectural_design": 5100,
+        "structural_engineering": 3700,
+        "site_survey": 1650
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.14,
+        "luxury": 1.33
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.07
+      },
+      "bathroom_cost": 2150,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "Oti",
+      "displayName": "Oti Region",
+      "land_cost_per_plot": 38000,
+      "construction_cost_per_sqm": 2920,
+      "labor_cost_per_day": 98,
+      "material_cost_index": 0.85,
+      "location_factor": 0.99,
+      "additional_fees": {
+        "permits": 2800,
+        "utilities_connection": 6800,
+        "architectural_design": 5800,
+        "structural_engineering": 4200,
+        "site_survey": 1900
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.17,
+        "luxury": 1.40
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.09
+      },
+      "bathroom_cost": 2400,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
+    },
+    {
+      "name": "Western North",
+      "displayName": "Western North Region",
+      "land_cost_per_plot": 52000,
+      "construction_cost_per_sqm": 3180,
+      "labor_cost_per_day": 125,
+      "material_cost_index": 0.90,
+      "location_factor": 1.01,
+      "additional_fees": {
+        "permits": 3400,
+        "utilities_connection": 7400,
+        "architectural_design": 6400,
+        "structural_engineering": 4900,
+        "site_survey": 2250
+      },
+      "quality_multipliers": {
+        "standard": 1.0,
+        "premium": 1.21,
+        "luxury": 1.44
+      },
+      "project_type_multipliers": {
+        "residential": 1.0,
+        "commercial": 1.12
+      },
+      "bathroom_cost": 2700,
+      "floor_multiplier": 0.05,
+      "external_works_rate": 0.05
     }
   ],
   "default_rates": {
