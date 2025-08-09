@@ -90,7 +90,7 @@ function ProjectForm({ onFormSubmit, isLoading }) {
     
     const totalFloorArea = parseInt(formData.totalFloorArea, 10);
     const minArea = formData.areaUnit === 'sqm' ? 50 : 500; // 50 sqm minimum, 500 sqft minimum
-    const maxArea = formData.areaUnit === 'sqm' ? 1000 : 10000; // 1000 sqm max, 10000 sqft max
+    const maxArea = formData.areaUnit === 'sqm' ? 200000 : 10000; // 200,000 sqm max, 10000 sqft max
     const areaLabel = formData.areaUnit === 'sqm' ? 'sq m' : 'sq ft';
     
     if (
@@ -100,7 +100,7 @@ function ProjectForm({ onFormSubmit, isLoading }) {
       totalFloorArea !== parseFloat(formData.totalFloorArea)
     ) {
       errors.push(
-        `Total Floor Area must be an integer between ${minArea} and ${maxArea} ${areaLabel}.`
+        `Total Floor Area must be an integer between ${minArea.toLocaleString()} and ${maxArea.toLocaleString()} ${areaLabel}.`
       );
     }
     
@@ -131,8 +131,8 @@ function ProjectForm({ onFormSubmit, isLoading }) {
     // Validate custom costs if enabled
     if (formData.useCustomLandCost) {
       const customLandCost = parseFloat(formData.customLandCost);
-      if (isNaN(customLandCost) || customLandCost < 0 || customLandCost > 1000000) {
-        errors.push("Custom land cost must be a valid number between 0 and 1,000,000 GHS.");
+      if (isNaN(customLandCost) || customLandCost < 0) {
+        errors.push("Custom land cost must be a valid positive number.");
       }
     }
 
@@ -225,7 +225,7 @@ function ProjectForm({ onFormSubmit, isLoading }) {
                 name="totalFloorArea"
                 type="number"
                 min={formData.areaUnit === 'sqm' ? 50 : 500}
-                max={formData.areaUnit === 'sqm' ? 1000 : 10000}
+                max={formData.areaUnit === 'sqm' ? 200000 : 10000}
                 step={1}
                 placeholder={formData.areaUnit === 'sqm' ? 'e.g., 200' : 'e.g., 2000'}
                 value={formData.totalFloorArea || ""}
@@ -246,8 +246,8 @@ function ProjectForm({ onFormSubmit, isLoading }) {
             </div>
             <p className="text-xs text-gray-500 mt-1">
               {formData.areaUnit === 'sqm' 
-                ? 'Square meters (preferred in Ghana)' 
-                : 'Square feet (1 sq ft = 0.093 sq m)'}
+                ? 'Square meters (preferred in Ghana) - Max: 200,000 sqm' 
+                : 'Square feet (1 sq ft = 0.093 sq m) - Max: 10,000 sqft'}
             </p>
           </div>
 
@@ -351,9 +351,8 @@ function ProjectForm({ onFormSubmit, isLoading }) {
                       name="customLandCost"
                       type="number"
                       min={0}
-                      max={1000000}
                       step={1000}
-                      placeholder="e.g., 120000"
+                      placeholder="e.g., 5000000"
                       value={formData.customLandCost || ""}
                       onChange={handleChange}
                       className="input-field rounded-lg p-3 focus:outline-none focus-ring"
