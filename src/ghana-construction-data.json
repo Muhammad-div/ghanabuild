@@ -462,5 +462,381 @@
     "dlgroupgh.com", 
     "nwngh.com",
     "housingafrique.com"
-  ]
+  ],
+  "materials": {
+    "foundation": [
+      {
+        "name": "Cement (50kg bag)",
+        "unit": "bag",
+        "cost_per_unit": 45,
+        "quantity_per_sqm": 0.8,
+        "category": "binding_materials"
+      },
+      {
+        "name": "Sand (truck load)",
+        "unit": "truck",
+        "cost_per_unit": 800,
+        "quantity_per_sqm": 0.02,
+        "category": "aggregates"
+      },
+      {
+        "name": "Gravel/Stones (truck load)",
+        "unit": "truck", 
+        "cost_per_unit": 1200,
+        "quantity_per_sqm": 0.015,
+        "category": "aggregates"
+      },
+      {
+        "name": "Reinforcement Steel (12mm)",
+        "unit": "length",
+        "cost_per_unit": 25,
+        "quantity_per_sqm": 8,
+        "category": "steel"
+      }
+    ],
+    "walls": [
+      {
+        "name": "Concrete Blocks (6 inch)",
+        "unit": "piece",
+        "cost_per_unit": 3.5,
+        "quantity_per_sqm": 12.5,
+        "category": "masonry"
+      },
+      {
+        "name": "Cement (50kg bag)",
+        "unit": "bag",
+        "cost_per_unit": 45,
+        "quantity_per_sqm": 0.6,
+        "category": "binding_materials"
+      },
+      {
+        "name": "Sand (truck load)",
+        "unit": "truck",
+        "cost_per_unit": 800,
+        "quantity_per_sqm": 0.025,
+        "category": "aggregates"
+      },
+      {
+        "name": "Reinforcement Steel (10mm)",
+        "unit": "length",
+        "cost_per_unit": 18,
+        "quantity_per_sqm": 6,
+        "category": "steel"
+      }
+    ],
+    "roofing": [
+      {
+        "name": "Aluminum Roofing Sheets",
+        "unit": "sheet",
+        "cost_per_unit": 85,
+        "quantity_per_sqm": 0.8,
+        "category": "roofing_materials"
+      },
+      {
+        "name": "Wooden Rafters (2x4 inches)",
+        "unit": "length",
+        "cost_per_unit": 25,
+        "quantity_per_sqm": 1.2,
+        "category": "timber"
+      },
+      {
+        "name": "Roofing Nails (25kg bag)",
+        "unit": "bag",
+        "cost_per_unit": 180,
+        "quantity_per_sqm": 0.02,
+        "category": "fasteners"
+      },
+      {
+        "name": "Ceiling Boards",
+        "unit": "sqm",
+        "cost_per_unit": 45,
+        "quantity_per_sqm": 1.0,
+        "category": "finishing"
+      }
+    ],
+    "finishing": [
+      {
+        "name": "Floor Tiles (60x60cm)",
+        "unit": "sqm",
+        "cost_per_unit": 35,
+        "quantity_per_sqm": 1.05,
+        "category": "flooring"
+      },
+      {
+        "name": "Wall Paint (20L bucket)",
+        "unit": "bucket",
+        "cost_per_unit": 320,
+        "quantity_per_sqm": 0.08,
+        "category": "painting"
+      },
+      {
+        "name": "Doors (Flush door)",
+        "unit": "piece",
+        "cost_per_unit": 450,
+        "quantity_per_sqm": 0.05,
+        "category": "joinery"
+      },
+      {
+        "name": "Windows (Aluminum frame)",
+        "unit": "sqm",
+        "cost_per_unit": 280,
+        "quantity_per_sqm": 0.15,
+        "category": "joinery"
+      }
+    ],
+    "plumbing": [
+      {
+        "name": "PVC Pipes (4 inch)",
+        "unit": "length",
+        "cost_per_unit": 15,
+        "quantity_per_sqm": 2,
+        "category": "pipes"
+      },
+      {
+        "name": "Water Taps",
+        "unit": "piece",
+        "cost_per_unit": 85,
+        "quantity_per_sqm": 0.08,
+        "category": "fixtures"
+      },
+      {
+        "name": "Toilet Suite",
+        "unit": "piece",
+        "cost_per_unit": 800,
+        "quantity_per_sqm": 0.03,
+        "category": "fixtures"
+      }
+    ],
+    "electrical": [
+      {
+        "name": "Electrical Cables (2.5mm)",
+        "unit": "meter",
+        "cost_per_unit": 8,
+        "quantity_per_sqm": 5,
+        "category": "wiring"
+      },
+      {
+        "name": "Power Sockets",
+        "unit": "piece",
+        "cost_per_unit": 25,
+        "quantity_per_sqm": 0.2,
+        "category": "accessories"
+      },
+      {
+        "name": "Light Switches",
+        "unit": "piece",
+        "cost_per_unit": 18,
+        "quantity_per_sqm": 0.1,
+        "category": "accessories"
+      },
+      {
+        "name": "Circuit Breakers",
+        "unit": "piece",
+        "cost_per_unit": 45,
+        "quantity_per_sqm": 0.02,
+        "category": "safety"
+      }
+    ]
+  },
+  "workers": {
+    "skilled": [
+      {
+        "role": "Mason",
+        "daily_rate": 120,
+        "hours_per_day": 8,
+        "productivity_sqm_per_day": 12,
+        "category": "masonry"
+      },
+      {
+        "role": "Carpenter",
+        "daily_rate": 110,
+        "hours_per_day": 8,
+        "productivity_sqm_per_day": 10,
+        "category": "woodwork"
+      },
+      {
+        "role": "Electrician",
+        "daily_rate": 130,
+        "hours_per_day": 8,
+        "productivity_sqm_per_day": 15,
+        "category": "electrical"
+      },
+      {
+        "role": "Plumber",
+        "daily_rate": 125,
+        "hours_per_day": 8,
+        "productivity_sqm_per_day": 18,
+        "category": "plumbing"
+      },
+      {
+        "role": "Tiler",
+        "daily_rate": 100,
+        "hours_per_day": 8,
+        "productivity_sqm_per_day": 8,
+        "category": "finishing"
+      },
+      {
+        "role": "Painter",
+        "daily_rate": 90,
+        "hours_per_day": 8,
+        "productivity_sqm_per_day": 20,
+        "category": "finishing"
+      },
+      {
+        "role": "Roofer",
+        "daily_rate": 115,
+        "hours_per_day": 8,
+        "productivity_sqm_per_day": 14,
+        "category": "roofing"
+      }
+    ],
+    "semi_skilled": [
+      {
+        "role": "Steel Bender",
+        "daily_rate": 85,
+        "hours_per_day": 8,
+        "productivity_sqm_per_day": 25,
+        "category": "reinforcement"
+      },
+      {
+        "role": "Block Layer Assistant",
+        "daily_rate": 70,
+        "hours_per_day": 8,
+        "productivity_sqm_per_day": 20,
+        "category": "masonry"
+      },
+      {
+        "role": "Concrete Mixer",
+        "daily_rate": 75,
+        "hours_per_day": 8,
+        "productivity_sqm_per_day": 30,
+        "category": "concrete"
+      }
+    ],
+    "unskilled": [
+      {
+        "role": "General Laborer",
+        "daily_rate": 50,
+        "hours_per_day": 8,
+        "productivity_sqm_per_day": 40,
+        "category": "general"
+      },
+      {
+        "role": "Material Handler",
+        "daily_rate": 55,
+        "hours_per_day": 8,
+        "productivity_sqm_per_day": 35,
+        "category": "general"
+      },
+      {
+        "role": "Site Cleaner",
+        "daily_rate": 45,
+        "hours_per_day": 8,
+        "productivity_sqm_per_day": 50,
+        "category": "general"
+      }
+    ]
+  },
+  "scope_of_work": {
+    "phases": [
+      {
+        "phase": "Site Preparation",
+        "duration_days": 5,
+        "percentage_of_total": 8,
+        "activities": [
+          "Site clearing and leveling",
+          "Soil testing and analysis", 
+          "Setting out and marking",
+          "Temporary structures setup",
+          "Access road preparation"
+        ],
+        "required_workers": ["General Laborer", "Mason"],
+        "required_materials": ["Sand", "Gravel/Stones"]
+      },
+      {
+        "phase": "Foundation Work",
+        "duration_days": 10,
+        "percentage_of_total": 15,
+        "activities": [
+          "Excavation and trenching",
+          "Foundation concrete laying",
+          "Reinforcement installation",
+          "Foundation curing",
+          "Backfilling and compaction"
+        ],
+        "required_workers": ["Mason", "Steel Bender", "General Laborer"],
+        "required_materials": ["Cement", "Sand", "Gravel/Stones", "Reinforcement Steel"]
+      },
+      {
+        "phase": "Structural Work",
+        "duration_days": 20,
+        "percentage_of_total": 25,
+        "activities": [
+          "Column and beam construction",
+          "Wall construction", 
+          "Lintel installation",
+          "Structural reinforcement",
+          "Quality control checks"
+        ],
+        "required_workers": ["Mason", "Steel Bender", "Block Layer Assistant"],
+        "required_materials": ["Concrete Blocks", "Cement", "Reinforcement Steel"]
+      },
+      {
+        "phase": "Roofing Work",
+        "duration_days": 8,
+        "percentage_of_total": 12,
+        "activities": [
+          "Roof structure installation",
+          "Roofing sheet installation",
+          "Guttering and drainage",
+          "Roof waterproofing",
+          "Ceiling installation"
+        ],
+        "required_workers": ["Roofer", "Carpenter"],
+        "required_materials": ["Aluminum Roofing Sheets", "Wooden Rafters", "Ceiling Boards"]
+      },
+      {
+        "phase": "Electrical Work",
+        "duration_days": 6,
+        "percentage_of_total": 8,
+        "activities": [
+          "Electrical rough-in",
+          "Wiring installation",
+          "Panel and breaker installation",
+          "Socket and switch installation",
+          "Electrical testing"
+        ],
+        "required_workers": ["Electrician"],
+        "required_materials": ["Electrical Cables", "Power Sockets", "Light Switches", "Circuit Breakers"]
+      },
+      {
+        "phase": "Plumbing Work", 
+        "duration_days": 7,
+        "percentage_of_total": 10,
+        "activities": [
+          "Pipe installation",
+          "Fixture installation",
+          "Water supply connection",
+          "Drainage system setup",
+          "Plumbing testing"
+        ],
+        "required_workers": ["Plumber"],
+        "required_materials": ["PVC Pipes", "Water Taps", "Toilet Suite"]
+      },
+      {
+        "phase": "Finishing Work",
+        "duration_days": 15,
+        "percentage_of_total": 22,
+        "activities": [
+          "Floor tiling",
+          "Wall plastering and painting",
+          "Door and window installation",
+          "Final electrical connections",
+          "Cleanup and final inspection"
+        ],
+        "required_workers": ["Tiler", "Painter", "Carpenter"],
+        "required_materials": ["Floor Tiles", "Wall Paint", "Doors", "Windows"]
+      }
+    ]
+  }
 }

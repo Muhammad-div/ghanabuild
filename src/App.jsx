@@ -690,7 +690,227 @@ function EstimateSummary({ estimateData, isLoading, error, onRetry }) {
           </div>
         </div>
       </motion.div>
+
+      {/* Materials List */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="result-card ghana-accent p-8 mt-6">
+        <MaterialsList estimateData={estimateData} />
+      </motion.div>
+
+      {/* Workers List */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="result-card ghana-accent p-8 mt-6">
+        <WorkersList estimateData={estimateData} />
+      </motion.div>
+
+      {/* Scope of Work */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="result-card ghana-accent p-8 mt-6">
+        <ScopeOfWork estimateData={estimateData} />
+      </motion.div>
     </section>
+  );
+}
+
+// Materials List Component
+function MaterialsList({ estimateData }) {
+  if (!estimateData?.projectDetails) return null;
+
+  const calculateMaterialQuantity = (material, totalFloorAreaSqm) => {
+    return material.quantity_per_sqm * totalFloorAreaSqm;
+  };
+
+  const calculateMaterialCost = (material, quantity) => {
+    return material.cost_per_unit * quantity;
+  };
+
+  const formatMoney = (n) =>
+    typeof n === 'number' && !Number.isNaN(n)
+      ? n.toLocaleString(undefined, { style: 'currency', currency: 'GHS', maximumFractionDigits: 0 })
+      : '-';
+
+  const totalFloorAreaSqm = estimateData.projectDetails.totalFloorAreaSqm;
+
+  return (
+    <div>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+        </div>
+        <div>
+          <h3 className="text-2xl font-bold text-gray-800">Materials List</h3>
+          <p className="text-gray-600">Detailed breakdown of construction materials needed</p>
+        </div>
+      </div>
+
+      {Object.entries(constructionData.materials).map(([category, materials]) => (
+        <div key={category} className="mb-6">
+          <h4 className="text-lg font-semibold text-gray-800 mb-3 capitalize">{category.replace('_', ' ')}</h4>
+          <div className="bg-white bg-opacity-50 rounded-lg overflow-hidden">
+            <div className="grid grid-cols-5 gap-4 p-4 bg-gray-100 font-semibold text-sm text-gray-700">
+              <div>Material</div>
+              <div>Unit</div>
+              <div>Rate (GHS)</div>
+              <div>Quantity</div>
+              <div>Total Cost</div>
+            </div>
+            {materials.map((material, idx) => {
+              const quantity = calculateMaterialQuantity(material, totalFloorAreaSqm);
+              const totalCost = calculateMaterialCost(material, quantity);
+              return (
+                <div key={idx} className="grid grid-cols-5 gap-4 p-4 border-b border-gray-200 hover:bg-gray-50">
+                  <div className="font-medium text-gray-800">{material.name}</div>
+                  <div className="text-gray-600">{material.unit}</div>
+                  <div className="text-gray-600">{formatMoney(material.cost_per_unit)}</div>
+                  <div className="text-gray-600">{quantity.toFixed(2)}</div>
+                  <div className="font-semibold text-gray-800">{formatMoney(totalCost)}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Workers List Component
+function WorkersList({ estimateData }) {
+  if (!estimateData?.projectDetails) return null;
+
+  const formatMoney = (n) =>
+    typeof n === 'number' && !Number.isNaN(n)
+      ? n.toLocaleString(undefined, { style: 'currency', currency: 'GHS', maximumFractionDigits: 0 })
+      : '-';
+
+  const totalFloorAreaSqm = estimateData.projectDetails.totalFloorAreaSqm;
+
+  const calculateWorkerDays = (worker, totalArea) => {
+    return Math.ceil(totalArea / worker.productivity_sqm_per_day);
+  };
+
+  const calculateWorkerCost = (worker, days) => {
+    return worker.daily_rate * days;
+  };
+
+  return (
+    <div>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+        </div>
+        <div>
+          <h3 className="text-2xl font-bold text-gray-800">Workers & Labor</h3>
+          <p className="text-gray-600">Required workforce and labor costs</p>
+        </div>
+      </div>
+
+      {Object.entries(constructionData.workers).map(([skillLevel, workers]) => (
+        <div key={skillLevel} className="mb-6">
+          <h4 className="text-lg font-semibold text-gray-800 mb-3 capitalize">{skillLevel.replace('_', ' ')} Workers</h4>
+          <div className="bg-white bg-opacity-50 rounded-lg overflow-hidden">
+            <div className="grid grid-cols-6 gap-4 p-4 bg-gray-100 font-semibold text-sm text-gray-700">
+              <div>Role</div>
+              <div>Daily Rate</div>
+              <div>Productivity</div>
+              <div>Days Needed</div>
+              <div>Total Cost</div>
+              <div>Category</div>
+            </div>
+            {workers.map((worker, idx) => {
+              const daysNeeded = calculateWorkerDays(worker, totalFloorAreaSqm);
+              const totalCost = calculateWorkerCost(worker, daysNeeded);
+              return (
+                <div key={idx} className="grid grid-cols-6 gap-4 p-4 border-b border-gray-200 hover:bg-gray-50">
+                  <div className="font-medium text-gray-800">{worker.role}</div>
+                  <div className="text-gray-600">{formatMoney(worker.daily_rate)}</div>
+                  <div className="text-gray-600">{worker.productivity_sqm_per_day} sqm/day</div>
+                  <div className="text-gray-600">{daysNeeded} days</div>
+                  <div className="font-semibold text-gray-800">{formatMoney(totalCost)}</div>
+                  <div className="text-gray-600 capitalize">{worker.category}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Scope of Work Component
+function ScopeOfWork({ estimateData }) {
+  if (!estimateData?.projectDetails) return null;
+
+  const totalDuration = constructionData.scope_of_work.phases.reduce((sum, phase) => sum + phase.duration_days, 0);
+
+  return (
+    <div>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+          </svg>
+        </div>
+        <div>
+          <h3 className="text-2xl font-bold text-gray-800">Scope of Work</h3>
+          <p className="text-gray-600">Construction phases and timeline ({totalDuration} days total)</p>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        {constructionData.scope_of_work.phases.map((phase, idx) => (
+          <div key={idx} className="bg-white bg-opacity-70 rounded-lg p-6 border border-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h4 className="text-lg font-semibold text-gray-800">{phase.phase}</h4>
+                <p className="text-sm text-gray-600">{phase.duration_days} days • {phase.percentage_of_total}% of total work</p>
+              </div>
+              <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                Phase {idx + 1}
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <h5 className="font-medium text-gray-700 mb-2">Activities</h5>
+                <ul className="space-y-1">
+                  {phase.activities.map((activity, actIdx) => (
+                    <li key={actIdx} className="text-sm text-gray-600 flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></span>
+                      {activity}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              
+              <div>
+                <h5 className="font-medium text-gray-700 mb-2">Required Workers</h5>
+                <div className="flex flex-wrap gap-2">
+                  {phase.required_workers.map((worker, workerIdx) => (
+                    <span key={workerIdx} className="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs">
+                      {worker}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <h5 className="font-medium text-gray-700 mb-2">Key Materials</h5>
+                <div className="flex flex-wrap gap-2">
+                  {phase.required_materials.map((material, matIdx) => (
+                    <span key={matIdx} className="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">
+                      {material}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
